@@ -1,3 +1,4 @@
+
 name: Build test deploy
 
 on:
@@ -11,39 +12,23 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
-
     - name: Use Node.js 20
       uses: actions/setup-node@v4
       with:
         node-version: 20
         cache: 'npm'
-
     - name: Install NPM modules
       run: npm install
-
     - name: Start Backend
       run: npm run start-be &
-    
     - name: Start Frontend
       run: npm run start-fe &
-
-    - name: Wait for Backend and Frontend to Start
-      run: sleep 20  # Adjust this if needed
-
-    - name: Install Playwright Browsers
+    - name: Install Browsers
       run: npx playwright install --with-deps
-
-    - name: Run UI tests with Playwright
+    - name: Execute UI tests
       run: npm run test:ui
-      env:
-        CI: true # Ensure Playwright runs correctly in CI
-
-    - name: Upload Playwright test results (for debugging)
-      if: failure()
-      uses: actions/upload-artifact@v3
-      with:
-        name: playwright-results
-        path: test-results/
+    
